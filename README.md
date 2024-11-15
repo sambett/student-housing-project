@@ -1,318 +1,138 @@
-# Student Housing Finder System
-## Comprehensive Project Documentation
+# 🏠 Student Housing Project
+> **🎯 Learning Focus: REST Web Services**  
+> 🚀 This project was developed as part of my journey learning RESTful Web Services, demonstrating practical implementation of REST principles in a real-world application.
 
-## Table of Contents
-1. [Project Overview](#1-project-overview)
-2. [System Architecture](#2-system-architecture)
-3. [Development Environment Setup](#3-development-environment-setup)
-4. [Database Design](#4-database-design)
-5. [Application Components](#5-application-components)
-6. [Implementation Guide](#6-implementation-guide)
-7. [API Documentation](#7-api-documentation)
-8. [Testing Strategy](#8-testing-strategy)
-9. [Deployment Guide](#9-deployment-guide)
+## 📚 Learning REST Architecture
+This project helped me understand core REST concepts:
+- 🔄 RESTful API design and implementation
+- 🌐 HTTP methods (GET, POST) for CRUD operations
+- 🛣️ Resource-based URL structuring
+- ⚡ Stateless communication
+- 📦 JSON data formatting
+- 🔒 Cross-Origin Resource Sharing (CORS)
 
-## 1. Project Overview
+## 🎨 Project Overview
+Built as a practical exercise in REST web services, this system consists of two main applications:
+- **🔙 Java Backend**: 
+  - ⚙️ Implements REST API endpoints using Jersey
+  - 📡 Demonstrates REST resource handling
+  - ✅ Shows proper HTTP status code usage
+  - 🔄 Implements proper request/response cycles
+- **🖥️ Python Frontend**: 
+  - 🌐 Consumes REST APIs
+  - 🔌 Shows client-side integration with REST services
 
-### 1.1 Description
-The Student Housing Finder is a web-based system designed to connect students with available housing options near their universities. The system facilitates property listings, searches, and booking management between students and landlords.
+### 🛠️ Technologies Used
+#### 🏗️ Backend (Java)
+- ☕ Java 11+
+- 🚀 Jersey framework for REST implementation
+- 🎯 Maven for dependency management
+- 💾 MySQL database
+- 🌐 Tomcat 8.5.92 server
 
-### 1.2 Core Features
-- Property listing management (CRUD operations)
-- Student search interface
-- Booking request system
-- Basic user management
-- Property image handling
-- REST API support
+#### 🎨 Frontend (Python)
+- 🐍 Python 3.8+
+- 🌶️ Flask web framework
+- 🔌 REST client implementation
 
-### 1.3 Target Users
-- Students seeking accommodation
-- Property owners/landlords
-- University housing administrators
-
-## 2. System Architecture
-
-### 2.1 Two-App Architecture
+## ⭐ REST API Features
+### 🔥 Implemented REST Endpoints
 ```
-App 1 (Java/Tomcat): Property Management System
-        ↕
-    Database (MySQL)
-        ↕
-App 2 (Python/Flask): Student Search System
+🔍 GET    /api/properties     - List all properties (Collection resource)
+➕ POST   /api/properties     - Create new property
+🎯 GET    /api/properties/{id} - Get specific property (Individual resource)
 ```
 
-### 2.2 Technology Stack
-- Backend (App 1):
-  - Java 8
-  - Apache Tomcat 9
-  - Jersey for REST API
-  - MySQL Database
-  - Servlet API 3.1
+### 🏆 REST Design Principles Applied
+- 🎯 Resource-based URLs
+- 🔄 Proper HTTP method usage
+- ⚡ Stateless communication
+- 📦 JSON response formatting
+- ✅ Appropriate status codes
+- 🔒 CORS handling
 
-- Frontend (App 2):
-  - Python 3.8+
-  - Flask Framework
-  - HTML/CSS
-  - Requests library
+## ⚙️ Setup Instructions
 
-## 3. Development Environment Setup
-
-### 3.1 Required Software
-1. Eclipse JEE 2024-09
-2. MySQL Server 8.0
-   - MySQL Community Server
-   - MySQL Workbench
-3. Apache Tomcat 9
-4. Java Development Kit 8 (JDK 8)
-
-### 3.2 Dependencies
-Required JAR files (WEB-INF/lib):
-- mysql-connector-j-8.0.x.jar
-- jersey-bundle-1.19.4.jar
-- javax.servlet-api-3.1.0.jar
-
-### 3.3 Eclipse Configuration
-1. Install Eclipse JEE 2024-09
-2. Configure Tomcat:
-   ```
-   Window → Preferences → Server → Runtime Environments
-   Add → Apache Tomcat 9.0
-   Browse to Tomcat installation directory
-   ```
-
-### 3.4 Project Setup
-1. Create Dynamic Web Project:
-   ```
-   File → New → Dynamic Web Project
-   Name: StudentHousingFinder
-   Target Runtime: Apache Tomcat 9.0
-   ```
-
-2. Project Structure:
-   ```
-   StudentHousingFinder/
-   ├── src/
-   │   └── main/
-   │       └── java/
-   │           └── com/
-   │               └── housing/
-   │                   ├── model/
-   │                   ├── dao/
-   │                   └── api/
-   └── WebContent/
-       ├── WEB-INF/
-       │   ├── lib/
-       │   └── web.xml
-       └── css/
-   ```
-
-## 4. Database Design
-
-### 4.1 Database Schema
+### 1️⃣ Database Setup
 ```sql
 CREATE DATABASE student_housing;
 USE student_housing;
-
--- Properties Table
 CREATE TABLE properties (
     id INT PRIMARY KEY AUTO_INCREMENT,
     title VARCHAR(100) NOT NULL,
     description TEXT,
     price DECIMAL(10,2) NOT NULL,
     rooms INT NOT NULL,
-    address VARCHAR(255) NOT NULL,
+    address VARCHAR(200) NOT NULL,
     neighborhood VARCHAR(100),
-    contact_phone VARCHAR(20) NOT NULL,
-    available BOOLEAN DEFAULT true,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--- Bookings Table
-CREATE TABLE bookings (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    property_id INT,
-    student_name VARCHAR(100) NOT NULL,
-    student_phone VARCHAR(20) NOT NULL,
-    status ENUM('pending', 'approved', 'rejected') DEFAULT 'pending',
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (property_id) REFERENCES properties(id)
+    contact_phone VARCHAR(20)
 );
 ```
 
-### 4.2 Sample Data
-```sql
-INSERT INTO properties (
-    title, 
-    description, 
-    price, 
-    rooms, 
-    address, 
-    neighborhood,
-    contact_phone
-) 
-VALUES 
-('Studio proche ENIT', 'Studio meublé, cuisine équipée', 400.00, 1, 'Rue des Ingénieurs', 'El Manar', '51234567'),
-('Appartement près de FST', 'Chambre dans appartement partagé', 300.00, 1, 'Avenue de la Faculté', 'Centre Urbain Nord', '22334455');
+### 2️⃣ REST Backend Setup
+1. 💻 Install Java 11+ and Maven
+2. 📂 Clone the repository
+3. 🔑 Update database credentials in `DatabaseConfig.java`
+4. 🚀 Run `mvn clean install`
+5. 📤 Deploy the WAR file to Tomcat
+
+### 3️⃣ Frontend Setup
+1. 🐍 Install Python 3.8+
+2. 🌶️ Install Flask: `pip install flask`
+3. 🚀 Run the Flask application: `python app.py`
+
+## 📁 Project Structure
+```
+student-housing/
+├── java-app/          # 🔙 REST Backend
+│   ├── src/
+│   │   └── main/
+│   │       ├── java/
+│   │       │   └── com/
+│   │       │       └── housing/
+│   │       │           ├── resources/    # 🎯 REST endpoints
+│   │       │           ├── model/        # 📦 Data models
+│   │       │           └── config/       # ⚙️ REST configuration
+│   └── pom.xml
+└── python-app/        # 🖥️ REST Client
+    ├── app.py
+    ├── templates/
+    └── static/
 ```
 
-## 5. Application Components
+## 🎓 Learning Outcomes
+Through this REST-focused project, I learned:
+- 📚 REST architectural principles and constraints
+- ⚡ Building RESTful APIs with Java and Jersey
+- 🔌 Consuming REST services in a Python client
+- 🌐 HTTP protocol and proper status code usage
+- 📝 API documentation and testing
+- 🔒 Cross-Origin Resource Sharing (CORS)
+- 💾 Database integration with REST services
+- 🏗️ Client-server separation in REST architecture
 
-### 5.1 Core Java Classes
+## 📚 Key Resources Used
+- 📖 Jersey REST framework documentation
+- 🎯 RESTful Web Services tutorials
+- 🌐 HTTP protocol specifications
+- ⭐ REST API design guidelines
+- 🔧 Postman for API testing
 
-#### Database Connection
-```java
-public class DBConnection {
-    private static final String URL = "jdbc:mysql://localhost:3306/student_housing";
-    private static final String USER = "root";
-    private static final String PASS = "your_password";
-    
-    public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(URL, USER, PASS);
-    }
-}
-```
+## 🤝 Contributing
+This is a learning project focused on REST web services. Suggestions and improvements are welcome! Feel free to:
+1. 🍴 Fork the repository
+2. 🌿 Create a feature branch
+3. 🎯 Submit a pull request
 
-#### Property Model
-```java
-public class Property {
-    private int id;
-    private String title;
-    private String description;
-    private double price;
-    private int rooms;
-    private String address;
-    private String neighborhood;
-    private String contactPhone;
-    private boolean available;
-    
-    // Getters and Setters
-}
-```
+## 📬 Contact
+If you have questions about REST implementation or this project, feel free to reach out!
 
-### 5.2 API Resources
-- PropertyResource: Handles property-related endpoints
-- BookingResource: Manages booking requests
-- SearchResource: Handles property search functionality
+## 📜 License
+This project is open source and available for other students learning REST web services.
 
-## 6. Implementation Guide
-
-### 6.1 Two-Week Implementation Plan
-
-#### Week 1: Java Backend (App 1)
-- Day 1-2: Setup & Database
-  - Environment setup
-  - Database creation
-  - Project structure setup
-
-- Day 3-4: Core Implementation
-  - Model classes
-  - DAO layer
-  - Basic API endpoints
-
-- Day 5: Initial Testing
-  - API endpoint testing
-  - Database connectivity
-  - Basic error handling
-
-#### Week 2: Python Frontend (App 2)
-- Day 1-2: Frontend Setup
-  - Flask application setup
-  - Basic templates
-  - API integration
-
-- Day 3-4: UI Implementation
-  - Search interface
-  - Property listings
-  - Booking forms
-
-- Day 5: Integration & Testing
-  - End-to-end testing
-  - Bug fixes
-  - Documentation
-
-## 7. API Documentation
-
-### 7.1 Available Endpoints
-
-#### Properties API
-```
-GET    /api/properties         - List all properties
-GET    /api/properties/{id}    - Get specific property
-POST   /api/properties         - Add new property
-PUT    /api/properties/{id}    - Update property
-DELETE /api/properties/{id}    - Delete property
-```
-
-#### Bookings API
-```
-POST   /api/bookings          - Create booking request
-GET    /api/bookings/{id}     - Get booking status
-PUT    /api/bookings/{id}     - Update booking status
-```
-
-### 7.2 Sample API Responses
-```json
-{
-    "id": 1,
-    "title": "Studio proche ENIT",
-    "price": 400.00,
-    "rooms": 1,
-    "address": "Rue des Ingénieurs",
-    "neighborhood": "El Manar",
-    "contact_phone": "51234567"
-}
-```
-
-## 8. Testing Strategy
-
-### 8.1 Database Testing
-- Connection testing
-- CRUD operations verification
-- Data integrity checks
-
-### 8.2 API Testing
-- Endpoint functionality
-- Response format validation
-- Error handling
-
-### 8.3 Integration Testing
-- Frontend-backend integration
-- Search functionality
-- Booking process
-
-## 9. Deployment Guide
-
-### 9.1 Prerequisites
-- JDK 8 installed
-- Tomcat 9 configured
-- MySQL Server running
-- Python 3.8+ (for App 2)
-
-### 9.2 Deployment Steps
-1. Database Setup
-   - Run schema creation script
-   - Import sample data
-   
-2. Java Application (App 1)
-   - Build WAR file
-   - Deploy to Tomcat
-   - Verify database connection
-   
-3. Python Application (App 2)
-   - Set up virtual environment
-   - Install dependencies
-   - Configure API endpoints
-   - Start Flask server
-
-### 9.3 Testing Deployment
-1. Verify Tomcat startup
-2. Check database connectivity
-3. Test API endpoints
-4. Validate frontend functionality
-
-🤝 Contributing
-This is a student project, but suggestions and improvements are welcome! Feel free to:
-
-1. Fork the repository
-2. Create a feature branch
-3. Submit a pull request
+---
+### 🌟 Quick Links
+- 📖 Documentation
+- 🐛 Issue Tracker
+- 💡 Feature Requests
+- 👥 Community Forum
