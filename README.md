@@ -127,12 +127,10 @@ This is a learning project focused on REST web services. Suggestions and improve
 ## 📬 Contact
 If you have questions about REST implementation or this project, feel free to reach out!
 
+---
+
 ## 📜 License
 This project is open source and available for other students learning REST web services.
 
 ---
-### 🌟 Quick Links
-- 📖 Documentation
-- 🐛 Issue Tracker
-- 💡 Feature Requests
-- 👥 Community Forum
+
